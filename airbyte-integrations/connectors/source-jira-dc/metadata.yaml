@@ -1,0 +1,63 @@
+data:
+  allowedHosts:
+    hosts:
+      - ${domain}
+  remoteRegistries:
+    pypi:
+      enabled: true
+      packageName: airbyte-source-jira-dc
+  registries:
+    oss:
+      enabled: true
+    cloud:
+      enabled: false
+  connectorBuildOptions:
+    baseImage: docker.io/airbyte/python-connector-base:2.0.0@sha256:c44839ba84406116e8ba68722a0f30e8f6e7056c726f447681bb9e9ece8bd916
+  connectorSubtype: api
+  connectorType: source
+  definitionId: f7630277-e4a2-4800-9e9b-21d8f112b800
+  dockerImageTag: 0.1.0
+  dockerRepository: airbyte/source-jira-dc
+  githubIssueLabel: source-jira-dc
+  icon: jira-dc.svg
+  license: MIT
+  name: Jira Dc
+  releaseDate: TODO
+  suggestedStreams:
+    streams:
+      - issues
+      - projects
+      - users
+      - issue_fields
+  supportLevel: community
+  releaseStage: alpha
+  documentationUrl: https://docs.airbyte.com/integrations/sources/jira-dc
+  tags:
+    - language:python
+  connectorTestSuitesOptions:
+    - suite: unitTests
+    - suite: integrationTests
+      testSecrets:
+        - name: SECRET_SOURCE-JIRA_EMPTY_PROJECTS_CREDS
+          fileName: config_empty_projects.json
+          secretStore:
+            type: GSM
+            alias: airbyte-connector-testing-secret-store
+        - name: SECRET_SOURCE-JIRA__CREDS
+          fileName: config.json
+          secretStore:
+            type: GSM
+            alias: airbyte-connector-testing-secret-store
+    - suite: acceptanceTests
+      testSecrets:
+        - name: SECRET_SOURCE-JIRA_EMPTY_PROJECTS_CREDS
+          fileName: config_empty_projects.json
+          secretStore:
+            type: GSM
+            alias: airbyte-connector-testing-secret-store
+        - name: SECRET_SOURCE-JIRA__CREDS
+          fileName: config.json
+          secretStore:
+            type: GSM
+            alias: airbyte-connector-testing-secret-store
+metadataSpecVersion: "1.0"

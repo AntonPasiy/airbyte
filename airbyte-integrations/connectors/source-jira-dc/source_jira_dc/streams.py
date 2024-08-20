@@ -313,7 +313,7 @@ class Projects(JiraStream):
     use_cache = True
 
     def path(self, **kwargs) -> str:
-        return "project/search"
+        return "project"
 
     def request_params(self, **kwargs):
         params = super().request_params(**kwargs)

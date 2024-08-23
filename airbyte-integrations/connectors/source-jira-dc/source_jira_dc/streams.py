@@ -315,17 +315,24 @@ class Projects(JiraStream):
     def path(self, **kwargs) -> str:
         return "project"
 
-    def request_params(self, **kwargs):
+    def request_params(self, **kwargs) -> MutableMapping[str, Any]:
+        # Формируем параметры запроса
         params = {
-            "expand": "description,lead",  # Добавляем дополнительные поля в ответе
-            "status": ["live", "archived", "deleted"]  # Добавляем фильтрацию по статусу
+            "expand": "description,lead",
+            "status": ["live", "archived", "deleted"]
         }
         return params
 
+    def next_page_token(self, response: requests.Response) -> Optional[Mapping[str, Any]]:
+        # Отключаем пагинацию, всегда возвращаем None
+        return None
+
     def read_records(self, **kwargs) -> Iterable[Mapping[str, Any]]:
+        # Проходимся по всем проектам и фильтруем по списку проектов, если указан
         for project in super().read_records(**kwargs):
             if not self._projects or project["key"] in self._projects:
                 yield project
+
 
 
 class IssueWorklogs(IncrementalJiraStream):

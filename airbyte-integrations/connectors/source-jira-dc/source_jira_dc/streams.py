@@ -309,16 +309,17 @@ class Projects(JiraStream):
     These latter streams cannot be migrated at the moment: https://github.com/airbytehq/airbyte-internal-issues/issues/7522
     """
 
-    extract_field = "values"
+    extract_field = None
     use_cache = True
 
     def path(self, **kwargs) -> str:
         return "project"
 
     def request_params(self, **kwargs):
-        params = super().request_params(**kwargs)
-        params["expand"] = "description,lead"
-        params["status"] = ["live", "archived", "deleted"]
+        params = {
+            "expand": "description,lead",  # Добавляем дополнительные поля в ответе
+            "status": ["live", "archived", "deleted"]  # Добавляем фильтрацию по статусу
+        }
         return params
 
     def read_records(self, **kwargs) -> Iterable[Mapping[str, Any]]:

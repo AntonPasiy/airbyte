@@ -289,7 +289,7 @@ def projects_versions_response():
 def mock_projects_responses(config, projects_response):
     responses.add(
         responses.GET,
-        f"https://{config['domain']}/rest/api/2/project?maxResults=50&expand=description%2Clead&status=live&status=archived&status=deleted",
+        f"https://{config['domain']}/rest/api/2/project?expand=description%2Clead&status=live&status=archived&status=deleted",
         json=projects_response,
     )
 
@@ -305,12 +305,13 @@ def mock_non_deleted_projects_responses(config, projects_response):
 
 @fixture
 def mock_projects_responses_additional_project(config, projects_response):
-    projects_response["values"] += [{"id": "3", "key": "Project3"}, {"id": "4", "key": "Project4"}]
+    projects_response += [{"id": "3", "key": "Project3"}, {"id": "4", "key": "Project4"}]
     responses.add(
         responses.GET,
-        f"https://{config['domain']}/rest/api/3/project?maxResults=50&expand=description%2Clead&status=live&status=archived&status=deleted",
+        f"https://{config['domain']}/rest/api/2/project?expand=description%2Clead&status=live&status=archived&status=deleted",
         json=projects_response,
     )
+
 
 
 @fixture

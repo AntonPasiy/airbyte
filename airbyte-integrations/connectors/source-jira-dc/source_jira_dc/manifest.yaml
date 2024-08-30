@@ -352,7 +352,7 @@ definitions:
   projects_stream:
     $ref: "#/definitions/full_refresh_stream"
     retriever:
-      $ref: "#/definitions/retriever_use_cache"
+      $ref: "#/definitions/retriever_no_pagination_use_cache"
       requester:
         $ref: "#/definitions/requester"
         request_parameters:

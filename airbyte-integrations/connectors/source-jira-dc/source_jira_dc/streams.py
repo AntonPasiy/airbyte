@@ -323,9 +323,11 @@ class Projects(JiraStream):
         }
         return params
 
+    '''
     def next_page_token(self, response: requests.Response) -> Optional[Mapping[str, Any]]:
         # Отключаем пагинацию, всегда возвращаем None
         return None
+    '''
 
     def read_records(self, **kwargs) -> Iterable[Mapping[str, Any]]:
         # Проходимся по всем проектам и фильтруем по списку проектов, если указан

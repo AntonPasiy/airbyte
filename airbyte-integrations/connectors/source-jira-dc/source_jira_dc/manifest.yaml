@@ -366,7 +366,7 @@ definitions:
     primary_key: "id"
     $parameters:
       path: "project"
-      extract_field: "values"
+      extract_field: "*"
 
   _non_deleted_projects:
     $ref: "#/definitions/projects_stream"

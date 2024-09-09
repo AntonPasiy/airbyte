@@ -159,7 +159,7 @@
     },
     "comment": {
       "description": "A comment about the worklog in [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/). Optional when creating or updating a worklog.",
-      "type": "object"
+      "type": "string"
     },
     "created": {
       "description": "The datetime on which the worklog was created.",

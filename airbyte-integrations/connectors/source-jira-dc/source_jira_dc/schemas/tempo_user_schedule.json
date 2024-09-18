@@ -1,54 +1,27 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Tempo User Schedule",
   "type": "object",
   "properties": {
     "user": {
       "description": "The user for whom the schedule applies.",
       "type": "string"
     },
-    "from": {
-      "description": "The start date of the schedule.",
+    "date": {
+      "description": "The date of the schedule day.",
       "type": "string",
       "format": "date"
-    },
-    "to": {
-      "description": "The end date of the schedule.",
-      "type": "string",
-      "format": "date"
-    },
-    "numberOfWorkingDays": {
-      "description": "The number of working days within the schedule period.",
-      "type": "integer"
     },
     "requiredSeconds": {
-      "description": "The total number of required seconds within the schedule period.",
+      "description": "The number of required seconds for this day.",
       "type": "integer"
     },
-    "days": {
-      "description": "The list of days in the schedule.",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "date": {
-            "description": "The date of the schedule day.",
-            "type": "string",
-            "format": "date"
-          },
-          "requiredSeconds": {
-            "description": "The number of required seconds for this day.",
-            "type": "integer"
-          },
-          "type": {
-            "description": "The type of day (WORKING_DAY or NON_WORKING_DAY).",
-            "type": "string",
-            "enum": ["WORKING_DAY", "NON_WORKING_DAY"]
-          }
-        }
-      }
+    "type": {
+      "description": "The type of day (WORKING_DAY or NON_WORKING_DAY).",
+      "type": "string",
+      "enum": ["WORKING_DAY", "NON_WORKING_DAY"]
     }
   },
-  "required": ["user", "from", "to", "days"],
   "additionalProperties": false,
-  "description": "A schedule for a specific user over a range of dates, including details for each day such as required working hours and type of day."
+  "description": "A schedule for a specific user including details for each day such as required working hours and type of day."
 }

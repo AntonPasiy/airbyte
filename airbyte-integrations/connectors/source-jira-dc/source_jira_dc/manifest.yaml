@@ -324,7 +324,7 @@ definitions:
 
 
   # https://apidocs.tempo.io/dc/modules/core.html?hsLang=en#tag/User-Schedule-V1
-  tempo_user_schedule:
+  tempo_user_schedule_stream:
     $ref: "#/definitions/full_refresh_stream"
     name: tempo_user_schedule
     retriever:
@@ -738,10 +738,10 @@ streams:
   - "#/definitions/workflows_stream"
   - "#/definitions/workflow_statuses_stream"
   - "#/definitions/workflow_status_categories_stream"
-  - "#/definitions/tempo_user_schedule"
+
 
   # Substream based streams
-
+  - "#/definitions/tempo_user_schedule_stream"
   - "#/definitions/issue_properties_stream"
   - "#/definitions/issue_remote_links_stream"
   - "#/definitions/issue_transitions_stream"
@@ -779,5 +779,4 @@ check:
     - board_issues
     - issues
     - sprint_issues
-    - tempo_user_schedule
 

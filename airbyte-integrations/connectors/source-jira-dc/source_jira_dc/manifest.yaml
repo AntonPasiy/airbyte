@@ -30,6 +30,11 @@ definitions:
     $ref: "#/definitions/requester"
     url_base: "https://{{ config['domain'] }}/rest/agile/1.0/"
 
+  requester_tempo:
+    $ref: "#/definitions/requester"
+    url_base: "https://{{ config['domain'] }}/rest/tempo-core/1/"
+    authenticator: "#/definitions/authenticator"
+
   # Selector
 
   selector:
@@ -96,6 +101,11 @@ definitions:
     requester:
       $ref: "#/definitions/retriever_v1/requester"
       use_cache: true
+
+  retriever_tempo_no_pagination:
+    record_selector: "#/definitions/selector"
+    requester: "#/definitions/requester_tempo"
+    paginator: "#/definitions/no_pagination_paginator"
 
   # Service Streams
 
@@ -312,8 +322,39 @@ definitions:
       path: "statuscategory"
       extract_field: "*"
 
-  # Substream Based Fullrefresh Streams
 
+  # https://apidocs.tempo.io/dc/modules/core.html?hsLang=en#tag/User-Schedule-V1
+  tempo_user_schedule:
+    $ref: "#/definitions/full_refresh_stream"
+    name: tempo_user_schedule
+    retriever:
+      requester:
+        $ref: "#/definitions/requester_tempo"
+        path: "user/schedule"
+      record_selector:
+        extractor:
+          type: DpathExtractor
+          field_path: [ "days" ]
+    transformations:
+      - type: AddFields
+        fields:
+          - path: [ "user" ]
+            value_type: string
+            value: "{{ stream_slice['name'] }}"
+    partition_router:
+      type: SubstreamPartitionRouter
+      parent_stream_configs:
+        - type: ParentStreamConfig
+          stream: "#/definitions/users_stream"
+          parent_key: "name"
+          partition_field: "name"
+    $parameters:
+      request_parameters:
+        user: "{{ stream_slice['name'] }}"
+        from: "{{ config['start_date'] }}"
+        to: "{{ now_utc().strftime('%Y-%m-%d') }}"
+
+  # Substream Based Fullrefresh Streams
 
   # https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-get
   __custom_issue_fields_substream:
@@ -697,6 +738,7 @@ streams:
   - "#/definitions/workflows_stream"
   - "#/definitions/workflow_statuses_stream"
   - "#/definitions/workflow_status_categories_stream"
+  - "#/definitions/tempo_user_schedule"
 
   # Substream based streams
 
@@ -737,3 +779,5 @@ check:
     - board_issues
     - issues
     - sprint_issues
+    - tempo_user_schedule
+

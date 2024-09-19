@@ -327,32 +327,32 @@ definitions:
   tempo_user_schedule_stream:
     $ref: "#/definitions/full_refresh_stream"
     name: tempo_user_schedule
+    primary_key: "date"
     retriever:
+      $ref: "#/definitions/retriever_no_pagination"
       requester:
         $ref: "#/definitions/requester_tempo"
-        path: "user/schedule"
-      record_selector:
-        extractor:
-          type: DpathExtractor
-          field_path: [ "days" ]
+      partition_router:
+        type: SubstreamPartitionRouter
+        parent_stream_configs:
+          - type: ParentStreamConfig
+            stream: "#/definitions/users_stream"
+            parent_key: "name"
+            partition_field: "name"
     transformations:
       - type: AddFields
         fields:
-          - path: [ "user" ]
+          - path: ["user"]
             value_type: string
-            value: "{{ stream_slice['name'] }}"
-    partition_router:
-      type: SubstreamPartitionRouter
-      parent_stream_configs:
-        - type: ParentStreamConfig
-          stream: "#/definitions/users_stream"
-          parent_key: "name"
-          partition_field: "name"
+            value: "{{ stream_slice.name }}"
     $parameters:
+      path: "user/schedule"
+      extract_field: "days"
       request_parameters:
-        user: "{{ stream_slice['name'] }}"
-        from: "{{ config['start_date'] }}"
+        user: "{{ stream_slice.name }}"
+        from: "{{ format_datetime(config['start_date'], '%Y-%m-%d') }}"
         to: "{{ now_utc().strftime('%Y-%m-%d') }}"
+
 
   # Substream Based Fullrefresh Streams
 
@@ -738,7 +738,6 @@ streams:
   - "#/definitions/workflows_stream"
   - "#/definitions/workflow_statuses_stream"
   - "#/definitions/workflow_status_categories_stream"
-
 
   # Substream based streams
   - "#/definitions/tempo_user_schedule_stream"
